@@ -1,4 +1,4 @@
-import { Check, Integration } from "../src/health-checker"
+import { Check, Integration } from "../src"
 
 const defaultExpectancy = {
   name: expect.any(String),
