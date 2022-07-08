@@ -1,0 +1,37 @@
+{
+  "name": "nodejs-health-checker-lw",
+  "version": "0.0.1",
+  "description": "A successor package for nodejs-health-checker",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "rm -rf dist;tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gritzkoo/nodejs-health-checker-lw.git"
+  },
+  "keywords": [
+    "healthcheck",
+    "health-check",
+    "liveness",
+    "readiness",
+    "k8s-probes"
+  ],
+  "author": "Gritzko D. Kleiner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gritzkoo/nodejs-health-checker-lw/issues"
+  },
+  "homepage": "https://github.com/gritzkoo/nodejs-health-checker-lw#readme",
+  "devDependencies": {
+    "@types/jest": "^28.1.4",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.19.0",
+    "jest": "^28.1.2",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4"
+  }
+}
