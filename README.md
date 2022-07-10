@@ -13,7 +13,8 @@ The main purpose of this package is to standardize the liveness and readiness ac
 
 ```sh
 npm i --save nodejs-health-checker-lw
-```
+or
+yarn add nodejs-health-checker-lw
 
 ## How to init
 
