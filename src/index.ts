@@ -65,7 +65,7 @@ export class HealthChecker implements HealthConfig {
   }
   private async check(integration: Integration): Promise<ReadinessIntegration> {
     const start = new Date().getTime()
-    let result = new Check({url:'unknow'})
+    let result = new Check({url:'unknown'})
     try {
       result = await integration.handle()
     } catch (error: unknown) {
