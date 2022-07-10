@@ -38,7 +38,7 @@ export const scenarios: Scenarios = {
       {
         name: 'test',
         handle: async (): Promise<Check> => {
-          return { url: 'test' }
+          return new Check({ url: 'test' })
         }
       },
     ]
@@ -58,7 +58,7 @@ export const scenarios: Scenarios = {
       {
         name: 'test',
         handle: async (): Promise<Check> => {
-          return { url: 'test', error: new Error("testing") }
+          return new Check({ url: 'test', error: new Error("testing") })
         }
       },
     ]
@@ -83,13 +83,13 @@ export const scenarios: Scenarios = {
       {
         name: 'test',
         handle: async (): Promise<Check> => {
-          return { url: 'test' }
+          return new Check({ url: 'test' })
         }
       },
       {
         name: 'test',
         handle: async (): Promise<Check> => {
-          return { url: 'test', error: new Error("testing") }
+          return new Check({ url: 'test', error: new Error("testing") })
         }
       },
     ]
@@ -115,7 +115,7 @@ export const scenarios: Scenarios = {
       {
         name: 'test',
         handle: async (): Promise<Check> => {
-          return { url: 'test' }
+          return new Check({ url: 'test' })
         }
       },
       {

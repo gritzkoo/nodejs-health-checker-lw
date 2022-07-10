@@ -7,9 +7,13 @@ export interface Integration {
   name: string
   handle(): Promise<Check>
 }
-export interface Check {
-  error?: Error | string | string[] | undefined | null | unknown
+export class Check {
   url?: string
+  error?: Error | string | string[] | undefined | null | unknown
+  constructor(obj: Check) {
+    this.url = obj.url
+    this.error = obj.error
+  }
 }
 export interface Liveness {
   status: string
@@ -61,7 +65,7 @@ export class HealthChecker implements HealthConfig {
   }
   private async check(integration: Integration): Promise<ReadinessIntegration> {
     const start = new Date().getTime()
-    let result: Check = {}
+    let result = new Check({url:'unknow'})
     try {
       result = await integration.handle()
     } catch (error: unknown) {
