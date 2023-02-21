@@ -308,7 +308,7 @@ I highly recommend you to fill this prop using a dynamic file content loading li
 
   ```
 
-- creating a file like `version.txt` using a command like:
+- creating a file like `version.txt` using a command like below in pipeline before a `docker build/push` steps:
 
   ```sh
   git show -s --format="%ai %H %s %aN" HEAD > version.txt
