@@ -35,13 +35,12 @@ Will return an `JSON` as below:
 ## Readiness method
 
 Will return an `JSON` as below:
+>The `stauts` prop will return true once all your integrations works. If one of then fails, this `status` prop will reflect that something goes wrong with something, and you need to check the `status` inside `integrations` prop
 
-```jsonc
+```json
 {
   "name": "myapp",
   "version": "v1.0.0",
-  // the main status of all integrations
-  // will return true when none of integrations fails
   "status": true,
   "date": "2022-07-10T00:46:19.186Z",
   "duration": 0.068,
