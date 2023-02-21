@@ -18,66 +18,7 @@ ____
 
 A successor package for [nodejs-health-checker](https://github.com/gritzkoo/nodejs-health-checker) to simplify health checks.
 
-The main purpose of this package is to standardize the liveness and readiness actions for Nodejs applications, for Kubernetes deployments.
-
-## How to install
-
-```sh
-npm i --save nodejs-health-checker-lw
-```
-
-OR
-
-```sh
-yarn add nodejs-health-checker-lw
-```
-
-## Creating your own checkers
-
-It's important to keep in mind that you need to create the tests you API needs as the example below:
-
-```ts
-// file /app/src/github.ts
-import { Check } from 'nodejs-health-checker-lw'
-import 'fetch' from 'node-fetch'
-
-export const MyIntegrationTest = async(): Promise<Check> => {
-  const check = new Check({url: 'https://github.com/status'})
-  fetch(check.url,{
-    timeout: 10
-  }).then( response => {
-    check.status = response.status === 200;
-    check.error = response.status !== 200 ? { http_status: response.status } : undefined,
-    resolve(check)
-  }).catch( error => {
-    check.error = error
-    resolve(check)
-  })
-}
-```
-
-## How to init
-
-```ts
-import { HealthChecker, Check } from 'nodejs-health-checker-lw'
-import { MyIntegrationTest } from 'src/github'
-export const check = new HealthChecker({
-  name: 'myapp',
-  version: 'v1.0.0',
-  // integrations are the list of outside integrations of your API you need to test
-  // to guarantee that your service is healthy to work
-  integrations: [
-    {
-      // name is just a string that will help you fast identify the integration you need to check-on
-      name: 'github integration',
-      //
-      handle: MyIntegrationTest
-      }
-    }
-  ]
-})
-```
-
+The main purpose of this package is to substitute `nodejs-health-checker` package and standardize the liveness and readiness actions for Nodejs applications running in Kubernetes deployments, without adding complexity and extra package installs.
 ___
 
 ## Liveness method
@@ -117,6 +58,69 @@ Will return an `JSON` as below:
 
 ___
 
+## How to install
+
+```sh
+npm i --save nodejs-health-checker-lw
+```
+
+OR
+
+```sh
+yarn add nodejs-health-checker-lw
+```
+
+## How to init
+
+First you `need` to write your own test as below:
+>this example is using http check for API integrations. Remember that you can write using your own methods and patterns. You need only to return an instance of `nodejs-health-checker Check`.
+
+```ts
+// file src/integrations/github.ts
+import { Check } from 'nodejs-health-checker-lw'
+import { fetch } from 'node-fetch'
+export async function TestGithubIntegration() Promise<Check> {
+  return new Promise((resolve, _) => {
+    let result = new Check({ url: 'https://github.com/status' })
+    // call a url to test connectivity and HTTP status
+    fetch(result.url, { timeout: 10000 })
+      .then(response => {
+        if (response.status !== 200) {
+          result.error = {
+            status: response.status,
+            body: response.body
+          }
+        }
+      })
+      .catch(error => result.error = error)
+      .finally(() => resolve(result))
+  })
+}
+
+```
+
+Then in your main declarations, you `MUST` create a `const` with `HealthChecker` from `nodejs-health-checker-lw` and fill a few props to create a re-usable pointer to be called after as below.
+> Read more about the `version` [in this topic](README.md#version-in-your-healthchecker)
+
+```ts
+// file src/healthchecker.ts
+import { HealthChecker} from 'nodejs-health-checker-lw'
+import { TestGithubIntegration } from 'src/integrations/github' // as the example above. This list can grow as mush as you need
+export const check = new HealthChecker({
+  name: 'myapp', // set your application name
+  version: 'v1.0.0', // set the version of your application
+  // integrations are the list of tests that needs to be executed.
+  integrations: [
+    {
+      // set the name of the integration that will be tested
+      name: 'github integration', 
+      // pass the functions that tests this integration
+      handle: MyIntegrationTest
+    }
+  ]
+})
+```
+
 ## How to use it
 
 Once you create a constant with an instance of HealthChecker, you can now call the methods, liveness, and readiness, in your application, in CLI or API mode
@@ -124,14 +128,22 @@ Once you create a constant with an instance of HealthChecker, you can now call t
 ### CLI interface
 
 ```js
-import check from 'src/to/your/check/const'
+import check from 'src/healthchecker' // as the example above
 const cliArgs = process.argv.slice(2)
 switch (cliArgs[0]) {
   case 'liveness':
     console.log(check.liveness())
     break
   case 'readiness':
-    check.readiness().then(response => console.log(response))
+    check.readiness().then(response => {
+      if (!response.status) {
+        // do something like trigger an alarm or log to other obervability stacks
+        console.warning(JSON.stringify({message: "health check fails", results: response}))
+      } else {
+        // or just log OK to track
+        console.info(JSON.stringify(response));
+      }
+    })
     break
   default:
     console.error(`invalid option: ${cliArgs[0]}... accepty only liveness or readiness`)
@@ -168,31 +180,41 @@ spec:
             command:
               - "/bin/node"
               - "your-script.js"
+            args:
               - "liveness"
         readinessProbe:
           exec:
             command:
               - "/bin/node"
               - "your-script.js"
+            args:
               - "readiness"
 ```
 
-____
+___
 
 ## HTTP interface
 
 In `javascript`
 
-```js
+```ts
 import express from 'express'
-import check from 'src/to/your/check/const'
+import check from 'src/healthchecker' // as the example above
 const PORT = process.env.PORT||80;
 const server = express()
 server.get('/health-check/liveness', (_, res) => {
   res.json(check.liveness())
 })
 server.get('/health-check/readiness', async (_, res) => {
-  res.json(await check.readiness())
+  const result = await check.readiness()
+  if (!response.status) {
+    // do something like trigger an alarm or log to other obervability stacks
+    console.warning(JSON.stringify({message: "health check fails", results: response}))
+  } else {
+    // or just log OK to track
+    console.info(JSON.stringify(response));
+  }
+  res.json(result)
 })
 server.listen(PORT, () => {
   console.log(`[SERVER] Running at http://localhost:${PORT}`);
@@ -234,4 +256,83 @@ spec:
             port: http
 ```
 
-____
+It's important to share that you `MUST` return aways an `OK` status in Kubernetes liveness and readiness because if one of your integration fails, this can teardown all of your pods and make your application unavailable. Use other observability stacks like `zabbix` or `grafana alarms` to track your application logs and then take actions based on observability! `(I learned this by the hard way =/ )`
+
+___
+
+## More pieces of informations
+
+___
+
+### Version in your `HealthChecker`
+
+I highly recommend you to fill this prop using a dynamic file content loading like:
+
+- reading the `package.json` file and use the `version` value to fill the version placeholder
+
+  ```ts
+  import fs from 'fs'
+  import path from 'path'
+  import { HealthChecker } from 'nodejs-health-checker-lw'
+  import { TestGithubIntegration } from 'src/integrations/github' 
+  
+  const versionFilePath = path('package.json')
+  const file = {
+    content: null
+    error: undefined
+  }
+  try {
+    let tmpRawData = await fs.readFileSync(versionFilePath, {encoding: 'utf8'})
+    file.content = JSON.parse(tmpRawData)
+  } catch (error) {
+    file.error = error
+  }
+
+  export const check = new HealthChecker({
+    name: 'myapp',
+    version: file.error || file.content.version
+    integrations: [
+      {
+        name: 'github integration', 
+        handle: MyIntegrationTest
+      }
+    ]
+  })
+
+  ```
+
+- creating a file like `version.txt` using a command like:
+
+  ```sh
+  git show -s --format="%ai %H %s %aN" HEAD > version.txt
+  ```
+  
+  then use it in your code like:
+
+  ```ts
+  import fs from 'fs'
+  import path from 'path'
+  import { HealthChecker } from 'nodejs-health-checker-lw'
+  import { TestGithubIntegration } from 'src/integrations/github' 
+
+  const versionFilePath = path('version.txt')
+  const file = {
+    content: null
+    error: undefined
+  }
+  try {
+    file.content = await fs.readFileSync(versionFilePath, {encoding: 'utf8'})
+  } catch (error) {
+    file.error = error
+  }
+  export const check = new HealthChecker({
+    name: 'myapp',
+    version: file.error || file.content
+    integrations: [
+      {
+        name: 'github integration', 
+        handle: MyIntegrationTest
+      }
+    ]
+  })
+  ```
