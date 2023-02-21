@@ -4,7 +4,8 @@
 
 ![npm](https://img.shields.io/npm/dt/nodejs-health-checker-lw?style=for-the-badge)
 
-[![test](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml/badge.svg)](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml)
+[![test](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml)
+[![build](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/build.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/gritzkoo/nodejs-health-checker-lw/badge.svg?branch=main)](https://coveralls.io/github/gritzkoo/nodejs-health-checker-lw?branch=main)
 ![GitHub](https://img.shields.io/github/license/gritzkoo/nodejs-health-checker-lw)
 ![GitHub issues](https://img.shields.io/github/issues/gritzkoo/nodejs-health-checker-lw)
