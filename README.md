@@ -1,8 +1,13 @@
 # nodejs-health-checker-lw
 
+<div align="center">
+
+![npm](https://img.shields.io/npm/dt/nodejs-health-checker-lw?style=for-the-badge)
+
 [![test](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml/badge.svg)](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/gritzkoo/nodejs-health-checker-lw/badge.svg?branch=main)](https://coveralls.io/github/gritzkoo/nodejs-health-checker-lw?branch=main)
 
+</div>
 ____
 
 A successor package for [nodejs-health-checker](https://github.com/gritzkoo/nodejs-health-checker) to simplify health checks.
@@ -13,13 +18,43 @@ The main purpose of this package is to standardize the liveness and readiness ac
 
 ```sh
 npm i --save nodejs-health-checker-lw
-or
+```
+
+OR
+
+```sh
 yarn add nodejs-health-checker-lw
+```
+
+## Creating your own checkers
+
+It's important to keep in mind that you need to create the tests you API needs as the example below:
+
+```ts
+// file /app/src/github.ts
+import { Check } from 'nodejs-health-checker-lw'
+import 'fetch' from 'node-fetch'
+
+export const MyIntegrationTest = async(): Promise<Check> => {
+  const check = new Check({url: 'https://github.com/status'})
+  fetch(check.url,{
+    timeout: 10
+  }).then( response => {
+    check.status = response.status === 200;
+    check.error = response.status !== 200 ? { http_status: response.status } : undefined,
+    resolve(check)
+  }).catch( error => {
+    check.error = error
+    resolve(check)
+  })
+}
+```
 
 ## How to init
 
 ```ts
 import { HealthChecker, Check } from 'nodejs-health-checker-lw'
+import { MyIntegrationTest } from 'src/github'
 export const check = new HealthChecker({
   name: 'myapp',
   version: 'v1.0.0',
@@ -30,25 +65,15 @@ export const check = new HealthChecker({
       // name is just a string that will help you fast identify the integration you need to check-on
       name: 'github integration',
       //
-      handle: async () => {
-        return new Promise((resolve, _) => {
-          const result = new Check({
-            // URL is the host you want to see in the readiness response
-            // when the Check.error is not empty.
-            // this prop is optional, but to help you deep dive into troubleshooting
-            // is better to place the DNS of the integration you tend to test
-            url: ''
-          })
-          // you can write your own validation here
-          // then send to Promise the instance of Check
-          resolve(result)
-        })
+      handle: MyIntegrationTest
       }
     }
   ]
 })
 ```
+
 ___
+
 ## Liveness method
 
 Will return an `JSON` as below:
@@ -202,4 +227,5 @@ spec:
             path: /health-check/readiness
             port: http
 ```
+
 ____
