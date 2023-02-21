@@ -25,6 +25,8 @@ A successor package for [nodejs-health-checker](https://github.com/gritzkoo/node
 
 The main purpose of this package is to substitute `nodejs-health-checker` package and standardize the liveness and readiness actions for Nodejs applications running in Kubernetes deployments, without adding complexity and extra package installs.
 
+Read more about migrating from `nodejs-health-checker` or creating your own tests in [MIGRATIONS GUIDELINES](docs/MIGRATIONS.md)
+
 ___
 
 ## Liveness method
