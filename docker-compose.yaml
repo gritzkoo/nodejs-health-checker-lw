@@ -5,6 +5,7 @@ services:
     image: node:16.15.1
     working_dir: /app/
     command: npm run dev
+    # user: "1000:1000"
+    # userns_mode: "root"
     volumes:
       - .:/app
-   
