@@ -1,0 +1,17 @@
+name: build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo clone
+        uses: actions/checkout@v3
+      - name: setup node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: build
+        run: |
+          npm install --legacy-peer-deps
+          npm run build
+

@@ -6,7 +6,12 @@
 
 [![test](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml/badge.svg)](https://github.com/gritzkoo/nodejs-health-checker-lw/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/gritzkoo/nodejs-health-checker-lw/badge.svg?branch=main)](https://coveralls.io/github/gritzkoo/nodejs-health-checker-lw?branch=main)
-
+![GitHub](https://img.shields.io/github/license/gritzkoo/nodejs-health-checker-lw)
+![GitHub issues](https://img.shields.io/github/issues/gritzkoo/nodejs-health-checker-lw)
+![npm](https://img.shields.io/npm/v/nodejs-health-checker-lw)
+[![Tag Status](https://img.shields.io/github/v/tag/gritzkoo/nodejs-health-checker-lw)](https://img.shields.io/github/v/tag/gritzkoo/nodejs-health-checker-lw)
+[![Languages Status](https://img.shields.io/github/languages/count/gritzkoo/nodejs-health-checker-lw)](https://img.shields.io/github/languages/count/gritzkoo/nodejs-health-checker-lw)
+[![Repo Size Status](https://img.shields.io/github/repo-size/gritzkoo/nodejs-health-checker-lw)](https://img.shields.io/github/repo-size/gritzkoo/nodejs-health-checker-lw)
 </div>
 ____
 
