@@ -1,7 +1,7 @@
 {
   "name": "nodejs-health-checker-lw",
-  "version": "1.0.0",
-  "description": "A successor package for nodejs-health-checker",
+  "version": "1.0.1",
+  "description": "The main purpose of this package is to substitute nodejs-health-checker package and standardize the liveness and readiness actions for Nodejs applications running in Kubernetes deployments, without adding complexity and extra package installs.",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
@@ -15,9 +15,14 @@
   "keywords": [
     "healthcheck",
     "health-check",
+    "health-checker",
+    "healthchecker",
     "liveness",
+    "livenessProbe",
     "readiness",
-    "k8s-probes"
+    "readinessProbe",
+    "k8s-probes",
+    "pods"
   ],
   "author": "Gritzko D. Kleiner",
   "license": "MIT",
