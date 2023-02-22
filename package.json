@@ -1,10 +1,11 @@
 {
   "name": "nodejs-health-checker-lw",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A successor package for nodejs-health-checker",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --collect-coverage",
     "build": "rm -rf dist;tsc"
   },
   "repository": {
@@ -25,15 +26,15 @@
   },
   "homepage": "https://github.com/gritzkoo/nodejs-health-checker-lw#readme",
   "devDependencies": {
-    "@types/jest": "^28.1.4",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
-    "eslint": "^8.19.0",
-    "jest": "^28.1.2",
-    "ts-jest": "^28.0.5",
-    "ts-node": "^10.8.2",
-    "tslib": "^2.4.0",
-    "typescript": "^4.7.4"
+    "@types/jest": "^28.1.8",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "eslint": "^8.34.0",
+    "jest": "^28.1.3",
+    "ts-jest": "^28.0.8",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
   },
   "files": [
     "dist/**/*"
