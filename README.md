@@ -25,13 +25,13 @@ A successor package for [nodejs-health-checker](https://github.com/gritzkoo/node
 
 The main purpose of this package is to substitute `nodejs-health-checker` package and standardize the liveness and readiness actions for Nodejs applications running in Kubernetes deployments, without adding complexity and extra package installs.
 
-Read more about migrating from `nodejs-health-checker` or creating your own tests in [MIGRATIONS GUIDELINES](docs/MIGRATIONS.md)
+Read more about migrating from `nodejs-health-checker` or creating your tests in [MIGRATIONS GUIDELINES](docs/MIGRATIONS.md)
 
 ___
 
 ## Liveness method
 
-Will return an `JSON` as below:
+Will return a `JSON` as below:
 
 ```json
 {
@@ -42,8 +42,8 @@ Will return an `JSON` as below:
 
 ## Readiness method
 
-Will return an `JSON` as below:
->The `stauts` prop will return true once all your integrations works. If one of then fails, this `status` prop will reflect that something goes wrong with something, and you need to check the `status` inside `integrations` prop
+Will return a `JSON` as below:
+>The `status` prop will return true once all your integrations works. If one of then fails, this `status` prop will reflect that something went wrong and you need to check the `status` inside `integrations` prop
 
 ```json
 {
@@ -79,7 +79,7 @@ yarn add nodejs-health-checker-lw
 
 ## How to init
 
-First you `need` to write your own test as below:
+First, you `need` to write your test like below:
 >this example is using http check for API integrations. Remember that you can write using your own methods and patterns. You need only to return an instance of `nodejs-health-checker Check`.
 
 ```ts
@@ -202,7 +202,7 @@ ___
 
 ## HTTP interface
 
-In `javascript`
+In `Javascript`
 
 ```ts
 import express from 'express'
@@ -263,19 +263,19 @@ spec:
             port: http
 ```
 
-It's important to share that you `MUST` return aways an `OK` status in Kubernetes liveness and readiness because if one of your integration fails, this can teardown all of your pods and make your application unavailable. Use other observability stacks like `zabbix` or `grafana alarms` to track your application logs and then take actions based on observability! `(I learned this by the hard way =/ )`
+It's important to share that you `MUST` return always an `OK` status in Kubernetes liveness and readiness because if one of your integration fails, this can teardown all of your pods and make your application unavailable. Use other observability stacks like `Zabbix` or `Grafana alarms` to track your application logs and then take actions based on observability! `(I learned it by the hard way =/ )`
 
 ___
 
-## More pieces of informations
+## More pieces of information
 
 ___
 
 ### Version in your `HealthChecker`
 
-I highly recommend you to fill this prop using a dynamic file content loading like:
+I highly recommend you fill this prop using a dynamic file content loading like:
 
-- reading the `package.json` file and use the `version` value to fill the version placeholder
+- reading the `package.json` file and using the `version` value to fill the `HealthChecker.version` placeholder like below:
 
   ```ts
   import fs from 'fs'
@@ -298,17 +298,12 @@ I highly recommend you to fill this prop using a dynamic file content loading li
   export const check = new HealthChecker({
     name: 'myapp',
     version: file.error || file.content.version
-    integrations: [
-      {
-        name: 'github integration', 
-        handle: MyIntegrationTest
-      }
-    ]
+    integrations: [/*and the list of your integrations here*/]
   })
 
   ```
 
-- creating a file like `version.txt` using a command like below in pipeline before a `docker build/push` steps:
+- creating a file like `version.txt` using a command like the below in the pipeline before a `docker build/push` steps:
 
   ```sh
   git show -s --format="%ai %H %s %aN" HEAD > version.txt
@@ -335,11 +330,6 @@ I highly recommend you to fill this prop using a dynamic file content loading li
   export const check = new HealthChecker({
     name: 'myapp',
     version: file.error || file.content
-    integrations: [
-      {
-        name: 'github integration', 
-        handle: MyIntegrationTest
-      }
-    ]
+    integrations: [/*and the list of your integrations here*/]
   })
   ```
