@@ -1,6 +1,6 @@
 {
   "name": "nodejs-health-checker-lw",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The main purpose of this package is to substitute nodejs-health-checker package and standardize the liveness and readiness actions for Nodejs applications running in Kubernetes deployments, without adding complexity and extra package installs.",
   "main": "dist/index.js",
   "scripts": {
